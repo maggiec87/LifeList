@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeList - 轻松规划、跟踪和实现您的人生目标</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            border-radius: 12px;
+            padding: 40px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .badge.license {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .badge.status {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-icon {
+            font-size: 28px;
+        }
+
+        .language-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .language-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-name {
+            min-width: 100px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .language-bar {
+            flex: 1;
+            height: 24px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .language-fill {
+            height: 100%;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding-right: 8px;
+        }
+
+        .language-fill.dart {
+            background: linear-gradient(90deg, #00d9ff, #0099cc);
+        }
+
+        .language-fill.cpp {
+            background: linear-gradient(90deg, #00599c, #004182);
+        }
+
+        .language-fill.cmake {
+            background: linear-gradient(90deg, #cc3300, #992200);
+        }
+
+        .language-fill.ruby {
+            background: linear-gradient(90deg, #cc342d, #aa2822);
+        }
+
+        .language-fill.c {
+            background: linear-gradient(90deg, #555, #333);
+        }
+
+        .language-fill.java {
+            background: linear-gradient(90deg, #007396, #005a8c);
+        }
+
+        .language-fill.other {
+            background: linear-gradient(90deg, #999, #666);
+        }
+
+        .language-percent {
+            min-width: 50px;
+            text-align: right;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-check {
+            color: #4caf50;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .feature-text {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .roadmap-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .roadmap-section h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .roadmap-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .roadmap-item.completed {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+        }
+
+        .roadmap-item.completed .icon {
+            color: #4caf50;
+        }
+
+        .roadmap-item .icon {
+            font-size: 18px;
+            color: #667eea;
+            min-width: 20px;
+        }
+
+        .roadmap-item .text {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .tech-stack {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .tech-stack h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tech-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .installation {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .installation h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .installation ol {
+            list-style-position: inside;
+            color: #333;
+            line-height: 2;
+        }
+
+        .installation li {
+            margin-bottom: 10px;
+        }
+
+        .installation code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #d32f2f;
+        }
+
+        .footer {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .github-link {
+            display: inline-block;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.3s ease;
+        }
+
+        .github-link:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .content-grid,
+            .roadmap-grid,
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 30px 20px;
+            }
+
+            .card,
+            .roadmap-section,
+            .tech-stack,
+            .installation {
+                padding: 20px;
+            }
+
+            .logo {
+                font-size: 36px;
+            }
+
+            .description {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">📋 LifeList</div>
+            <p class="description">轻松规划、跟踪和实现您的人生目标</p>
+            <p class="description" style="font-size: 16px; color: #999;">Plan, Track, and Achieve Your Life Goals Effortlessly</p>
+            <div class="badges">
+                <span class="badge license">📜 MIT License</span>
+                <span class="badge status">✅ Active</span>
+                <span class="badge">🎯 Goal Tracking</span>
+                <span class="badge">📱 Cross Platform</span>
+            </div>
+        </header>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2><span class="card-icon">💻</span>技术栈</h2>
+                <div class="language-chart">
+                    <div class="language-item">
+                        <div class="language-name">Dart</div>
+                        <div class="language-bar">
+                            <div class="language-fill dart" style="width: 91.5%;">91.5%</div>
+                        </div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-name">C++</div>
+                        <div class="language-bar">
+                            <div class="language-fill cpp" style="width: 5%;">5%</div>
+                        </div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-name">CMake</div>
+                        <div class="language-bar">
+                            <div class="language-fill cmake" style="width: 2.6%;">2.6%</div>
+                        </div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-name">Ruby</div>
+                        <div class="language-bar">
+                            <div class="language-fill ruby" style="width: 0.4%;">0.4%</div>
+                        </div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-name">C</div>
+                        <div class="language-bar">
+                            <div class="language-fill c" style="width: 0.2%;">0.2%</div>
+                        </div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-name">Java</div>
+                        <div class="language-bar">
+                            <div class="language-fill java" style="width: 0.2%;">0.2%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="card-icon">✨</span>核心特性</h2>
+                <div class="features">
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span class="feature-text">创建和管理清单</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span class="feature-text">按类别筛选</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span class="feature-text">Google Calendar 同步</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span class="feature-text">PDF 下载</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span class="feature-text">连续打卡功能</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-check">✓</span>
+                        <span class="feature-text">模板清单克隆</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tech-stack">
+            <h2><span class="card-icon">🛠️</span>技术框架</h2>
+            <div class="tech-tags">
+                <span class="tech-tag">Flutter</span>
+                <span class="tech-tag">Dart</span>
+                <span class="tech-tag">Google Calendar API</span>
+                <span class="tech-tag">离线优先</span>
+                <span class="tech-tag">多平台支持</span>
+                <span class="tech-tag">本地化</span>
+            </div>
+        </div>
+
+        <div class="roadmap-section">
+            <h2><span class="card-icon">🗺️</span>项目路线图</h2>
+            <div class="roadmap-grid">
+                <div class="roadmap-item completed">
+                    <span class="icon">✓</span>
+                    <span class="text">创建、编辑和删除清单</span>
+                </div>
+                <div class="roadmap-item completed">
+                    <span class="icon">✓</span>
+                    <span class="text">按类别和完成状态筛选</span>
+                </div>
+                <div class="roadmap-item completed">
+                    <span class="icon">✓</span>
+                    <span class="text">Google Calendar 同步</span>
+                </div>
+                <div class="roadmap-item completed">
+                    <span class="icon">✓</span>
+                    <span class="text">PDF 导出功能</span>
+                </div>
+                <div class="roadmap-item completed">
+                    <span class="icon">✓</span>
+                    <span class="text">按范围分类</span>
+                </div>
+                <div class="roadmap-item completed">
+                    <span class="icon">✓</span>
+                    <span class="text">连续打卡激励</span>
+                </div>
+                <div class="roadmap-item completed">
+                    <span class="icon">✓</span>
+                    <span class="text">多语言支持 (8种语言)</span>
+                </div>
+                <div class="roadmap-item completed">
+                    <span class="icon">✓</span>
+                    <span class="text">模板清单功能</span>
+                </div>
+                <div class="roadmap-item">
+                    <span class="icon">○</span>
+                    <span class="text">编辑个人资料</span>
+                </div>
+                <div class="roadmap-item">
+                    <span class="icon">○</span>
+                    <span class="text">编辑时修改任务</span>
+                </div>
+                <div class="roadmap-item">
+                    <span class="icon">○</span>
+                    <span class="text">新增语言支持 (Bengali)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="installation">
+            <h2><span class="card-icon">📥</span>安装指南</h2>
+            <ol>
+                <li>克隆仓库: <code>git clone https://github.com/Spyy004/lifelist.git</code></li>
+                <li>安装依赖: <code>flutter pub get</code></li>
+                <li>配置翻译: <code>flutter gen-l10n</code></li>
+                <li>运行应用: <code>flutter run --debug</code></li>
+            </ol>
+        </div>
+
+        <div class="footer">
+            <p><strong>LifeList</strong> - 您的个人目标管理助手</p>
+            <p>使用 Flutter 框架构建，支持多平台离线使用</p>
+            <p>开源协议：MIT License</p>
+            <a href="https://github.com/Spyy004/LifeList" class="github-link">🔗 访问 GitHub 仓库</a>
+            <p style="margin-top: 20px; font-size: 12px; color: #999;">
+                © 2023 Ayush Pawar | 开发者: <a href="https://github.com/Spyy004">@Spyy004</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
